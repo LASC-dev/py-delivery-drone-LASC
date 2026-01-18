@@ -24,10 +24,7 @@ class BaseRobot:
         """
         self.name = name
         self.weight = weight
-        if coords is None:
-            self.coords = [0, 0]
-        else:
-            self.coords = coords
+        self.coords = coords or [0, 0]
 
     def go_forward(
         self,
@@ -99,11 +96,9 @@ class FlyingRobot(BaseRobot):
             coords (list[int]): the cardinal position along the
                 three axes [x, y, z].
         """
-        super().__init__(name, weight)
+        super().__init__(name, weight, coords)
         if coords is None:
-            self.coords = [0, 0, 0]
-        else:
-            self.coords = coords
+            self.coords.append(0)
 
     def go_up(
         self,
@@ -169,10 +164,8 @@ class DeliveryDrone(FlyingRobot):
         """
         if (
             self.current_load is None
-            and
-            isinstance(load, Cargo)
-            and
-            load.weight <= self.max_load_weight
+            and isinstance(load, Cargo)
+            and load.weight <= self.max_load_weight
         ):
             self.current_load = load
 
