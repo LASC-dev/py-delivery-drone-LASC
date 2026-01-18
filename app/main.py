@@ -97,7 +97,7 @@ class FlyingRobot(BaseRobot):
                 three axes [x, y, z].
         """
         super().__init__(name, weight, coords)
-        if coords is None:
+        if len(self.coords) == 2:
             self.coords.append(0)
 
     def go_up(
