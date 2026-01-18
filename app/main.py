@@ -1,29 +1,33 @@
+from typing import Optional
+
+
 class Cargo:
     def __init__(self, weight: int) -> None:
         self.weight = weight
 
 
 class BaseRobot:
-    """
-    Representation of a common robot that can move along two cartesian axes.
-
-    Attributes:
-        name (str): name of the robot.
-        weight (int | float): represents how many kg it weighs.
-        coords (list): coordinates with two cartesian axes [x, y].
-    """
-
     def __init__(
-        self,
-        name: str,
-        weight: int | float,
-        coords: list
+            self,
+            name: str,
+            weight: int,
+            coords: list[int] | None = None
     ) -> None:
+        """
+        Representation of a common robot that can move along
+        two cartesian axes.
+
+        Attributes:
+            name (str): name of the robot.
+            weight (int | float): represents how many kg it weighs.
+            coords (list | None): coordinates with two cartesian axes [x, y].
+        """
         self.name = name
         self.weight = weight
-        if self.coords is None:
+        if coords is None:
             self.coords = [0, 0]
-        self.coords = coords
+        else:
+            self.coords = coords
 
     def go_forward(
         self,
@@ -80,26 +84,26 @@ class BaseRobot:
 
 
 class FlyingRobot(BaseRobot):
-    """
-    It represents a robot with the ability to fly.
-
-    Aargs:
-        name (str): the robot's name.
-        weight (int | float): the robot's weight.
-        coords (list[int]): the cardinal position along the
-            three axes [x, y, z].
-    """
-
     def __init__(
         self,
         name: str,
         weight: int | float,
-        coords: list[int]
+        coords: list[int] | None = None
     ) -> None:
+        """
+        It represents a robot with the ability to fly.
+
+        Attributes:
+            name (str): the robot's name.
+            weight (int | float): the robot's weight.
+            coords (list[int]): the cardinal position along the
+                three axes [x, y, z].
+        """
         super().__init__(name, weight)
         if coords is None:
             self.coords = [0, 0, 0]
-        self.coords = coords
+        else:
+            self.coords = coords
 
     def go_up(
         self,
@@ -121,31 +125,30 @@ class FlyingRobot(BaseRobot):
         Move the robot downwards by decreasing the z-axis.
 
         Args:
-        step (int): Number of steps to move. The default value is 1.
+            step (int): Number of steps to move. The default value is 1.
         """
         self.coords[2] -= step
 
 
 class DeliveryDrone(FlyingRobot):
-    """
-    Represents a delivery robot that can fly.
-
-    Args:
-        name (str): Name of the robot.
-        weight (int): The weight of the robot.
-        coords (list[int]): The 3d position of the robot.
-        max_load_weight (int): The total weight the robot can carry.
-        current_load ("Cargo"): The load it is currently carrying.
-    """
-
     def __init__(
         self,
         name: str,
         weight: int,
-        coords: list[int],
         max_load_weight: int,
-        current_load: "Cargo"
+        coords: list[int] | None = None,
+        current_load: Optional["Cargo"] | None = None
     ) -> None:
+        """
+        Represents a delivery robot that can fly.
+
+        Attributes:
+            name (str): Name of the robot.
+            weight (int): The weight of the robot.
+            coords (list[int]): The 3d position of the robot.
+            max_load_weight (int): The total weight the robot can carry.
+            current_load ("Cargo"): The load it is currently carrying.
+        """
         super().__init__(name, weight, coords)
         self.max_load_weight = max_load_weight
         self.current_load = None
