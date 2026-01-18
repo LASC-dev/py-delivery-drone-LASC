@@ -124,3 +124,59 @@ class FlyingRobot(BaseRobot):
         step (int): Number of steps to move. The default value is 1.
         """
         self.coords[2] -= step
+
+
+class DeliveryDrone(FlyingRobot):
+    """
+    Represents a delivery robot that can fly.
+
+    Args:
+        name (str): Name of the robot.
+        weight (int): The weight of the robot.
+        coords (list[int]): The 3d position of the robot.
+        max_load_weight (int): The total weight the robot can carry.
+        current_load ("Cargo"): The load it is currently carrying.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        weight: int,
+        coords: list[int],
+        max_load_weight: int,
+        current_load: "Cargo"
+    ) -> None:
+        super().__init__(name, weight, coords)
+        self.max_load_weight = max_load_weight
+        self.current_load = None
+        if current_load is not None:
+            self.hook_load(current_load)
+
+    def hook_load(
+        self,
+        load: "Cargo"
+    ) -> None:
+        """
+        Manages the robot's current load, which cannot be more than
+        one instance of Cargo or exceed the robot's maximum load.
+
+        Args:
+            load ("Cargo"): Cargo instance that the robot would load if
+            the requirements are met.
+        """
+        if (
+            self.current_load is None
+            and
+            isinstance(load, Cargo)
+            and
+            load.weight <= self.max_load_weight
+        ):
+            self.current_load = load
+
+    def unhook_load(
+        self
+    ) -> None:
+        """
+        Remove the load from the robot's hook.
+        """
+        self.current_load = None
